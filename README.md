@@ -39,6 +39,7 @@ A full-stack AI meeting note-taker application built with Next.js, FastAPI, and 
 1. **Protocol-Oriented AI Services:** The backend uses Python `Protocol` classes (`SummaryProvider`) to define the AI contract. This allowed for clean dependency injection and made the Multi-LLM fallback mechanism modular and testable.
 2. **Mocked Authentication:** As per project scope, real authentication is deferred. However, the database and API routes strictly enforce `owner_id` filtering via a `get_current_user` FastAPI dependency, ensuring a real JWT auth system can be dropped in later with zero changes to the core business logic.
 3. **Frontend API Proxying:** The frontend utilizes centralized API fetch wrappers with robust error handling and Next.js environment variable configurations to seamlessly bridge local development and cloud deployments.
+4. **Smart Database Seeding:** To provide an immediate, rich experience for reviewers, the backend includes an automated seeding script (`seed.py`). On first startup, it populates the database with realistic mock meetings, calculating dynamic timestamps relative to the current day (e.g., "Yesterday", "3 days ago") so the dashboard UI and date-grouping logic can be evaluated instantly.
 
 ---
 
