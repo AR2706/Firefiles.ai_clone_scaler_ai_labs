@@ -18,7 +18,7 @@ import type {
   User,
 } from "./types";
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+export const API_URL = "";
 
 export class ApiError extends Error {
   constructor(
@@ -41,8 +41,10 @@ function errorMessage(body: unknown, status: number): string {
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   let response: Response;
   try {
+    console.log("FETCHING URL:", `${API_URL}/api${path}`);
     response = await fetch(`${API_URL}/api${path}`, init);
-  } catch {
+  } catch (err) {
+    console.error("FETCH ERROR:", err);
     throw new ApiError("Cannot reach the server. Is the backend running?", 0);
   }
   if (!response.ok) {
@@ -80,7 +82,7 @@ export interface MeetingInput {
 }
 
 export const api = {
-  me: () => request<User>("/me"),
+  me: () => request<User>("/me", { cache: "no-store" }),
   participants: () => request<Participant[]>("/participants"),
   tags: () => request<Tag[]>("/tags"),
 

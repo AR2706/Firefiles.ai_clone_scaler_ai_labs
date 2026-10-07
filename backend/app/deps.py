@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Meeting, User
 
-DEFAULT_USER = {"name": "Alex Morgan", "email": "alex@meetnotes.app"}
+DEFAULT_USER = {"name": "Aritra Pradhan", "email": "aritra@meetnotes.app"}
 
 
 def get_current_user(db: Session = Depends(get_db)) -> User:

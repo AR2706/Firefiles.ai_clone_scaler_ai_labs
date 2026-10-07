@@ -1,0 +1,5 @@
+[00:00:00] Alice: Hi everyone, let's start the weekly sync. Bob, do you have updates on the frontend?
+[00:00:10] Bob: Yes, I finished the dashboard layout. I'll start working on the analytics page tomorrow.
+[00:00:20] Alice: Great. We also need to fix the login bug.
+[00:00:25] Charlie: I can take care of the login bug today. I'll make sure it's deployed by 5 PM.
+[00:00:35] Alice: Perfect. Let's wrap up. Thanks team!

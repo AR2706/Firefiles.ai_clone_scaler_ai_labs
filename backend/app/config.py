@@ -8,11 +8,7 @@ DATA_DIR = BASE_DIR / "data"
 DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DATA_DIR / 'app.db'}")
 
 # Comma-separated list of origins allowed to call the API from a browser.
-CORS_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
-    if origin.strip()
-]
+CORS_ORIGINS = ["*"]
 
 # Seed the database with sample meetings when it is empty on startup.
 SEED_ON_STARTUP = os.getenv("SEED_ON_STARTUP", "true").lower() == "true"

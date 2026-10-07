@@ -1,9 +1,13 @@
-import { CheckSquare, Clock } from "lucide-react";
+"use client";
+
+import { CheckSquare, Clock, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { AvatarStack } from "@/components/ui/Avatar";
 import { formatDuration, formatTime } from "@/lib/format";
 import type { MeetingListItem } from "@/lib/types";
+import { api } from "@/lib/api";
 
 export function TagChip({ name }: { name: string }) {
   return (
@@ -14,11 +18,27 @@ export function TagChip({ name }: { name: string }) {
 }
 
 export function MeetingRow({ meeting }: { meeting: MeetingListItem }) {
+  const [isDeleting, setIsDeleting] = useState(false);
   const names = meeting.participants.map((participant) => participant.name);
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!window.confirm(`Are you sure you want to delete "${meeting.title}"?`)) return;
+    
+    setIsDeleting(true);
+    try {
+      await api.deleteMeeting(meeting.id);
+      window.location.reload();
+    } catch (err) {
+      alert("Failed to delete meeting");
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Link
       href={`/meetings/${meeting.id}`}
-      className="flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-hover"
+      className={`group flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-hover ${isDeleting ? "opacity-50 pointer-events-none" : ""}`}
     >
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
@@ -46,6 +66,13 @@ export function MeetingRow({ meeting }: { meeting: MeetingListItem }) {
       <div className="hidden shrink-0 sm:block">
         <AvatarStack names={names} />
       </div>
+      <button 
+        onClick={handleDelete}
+        className="opacity-0 group-hover:opacity-100 p-2 text-muted hover:text-red-500 transition-opacity ml-2 rounded hover:bg-red-50 dark:hover:bg-red-950"
+        title="Delete meeting"
+      >
+        <Trash2 size={16} />
+      </button>
     </Link>
   );
 }
