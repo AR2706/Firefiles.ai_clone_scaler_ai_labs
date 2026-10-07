@@ -18,7 +18,7 @@ import type {
   User,
 } from "./types";
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8001";
+export const API_URL = "https://firefiles-ai-clone-scaler-ai-labs.onrender.com";
 
 export class ApiError extends Error {
   constructor(
