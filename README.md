@@ -44,6 +44,10 @@ A full-stack AI meeting note-taker application built with Next.js, FastAPI, and 
 3. **Frontend API Proxying:** The frontend utilizes centralized API fetch wrappers with robust error handling and Next.js environment variable configurations to seamlessly bridge local development and cloud deployments.
 4. **Smart Database Seeding:** To provide an immediate, rich experience for reviewers, the backend includes an automated seeding script (`seed.py`). On first startup, it populates the database with realistic mock meetings, calculating dynamic timestamps relative to the current day (e.g., "Yesterday", "3 days ago") so the dashboard UI and date-grouping logic can be evaluated instantly.
 
+## 🧪 Quick Testing Guide
+I have included a sample transcript file named **`test-meeting.txt`** in the root of this repository. 
+When testing the application, you can upload this file via the "Create meeting" button in the UI to instantly evaluate the parsing, LLM summarization, and action-item generation features without needing to supply your own transcript.
+
 ---
 
 ## 🛠️ Local Development
