@@ -46,5 +46,5 @@ export function pageTitle(pathname: string): string {
   if (pathname.startsWith("/search")) return "Search";
   if (pathname.startsWith("/live")) return "Live capture";
   const match = NAV_GROUPS.flat().find((item) => isActive(pathname, item.href));
-  return match?.label ?? "MeetNotes";
+  return match?.label ?? "Fireflies.ai_clone";
 }

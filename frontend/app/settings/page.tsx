@@ -111,7 +111,7 @@ export default function SettingsPage() {
         )}
 
         {section === "appearance" && (
-          <Setting title="Theme" description="Choose how MeetNotes looks on this device.">
+          <Setting title="Theme" description="Choose how Fireflies.ai_clone looks on this device.">
             <div className="flex items-center gap-4">
               <span>
                 Current theme: <span className="font-medium">{theme === "dark" ? "Dark" : "Light"}</span>

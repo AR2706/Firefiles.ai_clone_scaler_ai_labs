@@ -41,7 +41,7 @@ export function Topbar() {
     <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line bg-surface px-4">
       <Link
         href="/"
-        aria-label="MeetNotes home"
+        aria-label="Fireflies.ai_clone home"
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand text-white md:hidden dark:text-[#16131f]"
       >
         <AudioLines size={16} />

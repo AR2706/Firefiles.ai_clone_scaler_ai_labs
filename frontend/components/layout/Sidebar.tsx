@@ -36,11 +36,11 @@ export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle:
       }`}
     >
       <div className={`flex h-14 items-center gap-2 ${collapsed ? "justify-center" : "px-3.5"}`}>
-        <Link href="/" className="flex min-w-0 items-center gap-2" aria-label="MeetNotes home">
+        <Link href="/" className="flex min-w-0 items-center gap-2" aria-label="Fireflies.ai_clone home">
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand text-white dark:text-[#16131f]">
             <AudioLines size={16} />
           </span>
-          {!collapsed && <span className="truncate text-[15px] font-semibold tracking-tight">MeetNotes</span>}
+          {!collapsed && <span className="truncate text-[15px] font-semibold tracking-tight">Fireflies.ai_clone</span>}
         </Link>
         {!collapsed && (
           <button

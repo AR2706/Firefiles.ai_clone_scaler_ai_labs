@@ -8,7 +8,7 @@ import { ToastProvider } from "@/components/ui/Toast";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MeetNotes",
+  title: "Fireflies.ai_clone",
   description: "Meeting transcripts, AI summaries and action items in one place.",
 };
 
