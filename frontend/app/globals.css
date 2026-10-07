@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/* Dark mode is switched by a `dark` class on <html>, not by the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f6f6fa;
+  --surface: #ffffff;
+  --hover: #f2f1f8;
+  --line: #e7e6ef;
+  --ink: #1c1b29;
+  --muted: #6c6b7f;
+  --brand: #6c2bd9;
+  --brand-strong: #5a1fc0;
+  --brand-soft: #f1eaff;
+  --mark: #fde68a;
+  --mark-active: #fb923c;
+}
+
+.dark {
+  --bg: #111018;
+  --surface: #1a1924;
+  --hover: #24232f;
+  --line: #2e2d3b;
+  --ink: #ececf3;
+  --muted: #9a99ad;
+  --brand: #a78bfa;
+  --brand-strong: #c4b5fd;
+  --brand-soft: #2a2145;
+  --mark: #854d0e;
+  --mark-active: #c2410c;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-hover: var(--hover);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+mark {
+  background: var(--mark);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+mark[data-active="true"] {
+  background: var(--mark-active);
+  color: #fff;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast-in {
+  animation: toast-in 0.18s ease-out;
+}

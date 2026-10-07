@@ -152,8 +152,113 @@ class ExtractiveSummaryProvider:
         return items[:MAX_ACTION_ITEMS]
 
 
+import os
+import json
+import httpx
+import logging
+
+logger = logging.getLogger(__name__)
+
+LLM_PROMPT = """You are an AI meeting assistant. Read the following transcript and extract the meeting notes.
+Output ONLY valid JSON matching this schema exactly:
+{
+  "overview": "A 1-2 sentence overview of the meeting.",
+  "key_points": ["Key point 1", "Key point 2"],
+  "keywords": ["keyword1", "keyword2"],
+  "chapters": [{"title": "Chapter 1", "summary": "What happened", "start_ms": 0}],
+  "action_items": [{"text": "Action item description", "assignee": "Person Name or null", "source_start_ms": 0}]
+}
+Transcript:
+"""
+
+class MultiLLMFallbackProvider:
+    def __init__(self):
+        self.fallback = ExtractiveSummaryProvider()
+
+    def summarize(self, segments: list[TranscriptSegment], style: str = "standard") -> NotesResult:
+        text = "\n".join(f"[{s.start_ms}] {s.speaker_name}: {s.text}" for s in segments)
+        prompt = LLM_PROMPT + text
+        
+        # 1. Try Mistral
+        mistral_key = os.getenv("MISTRAL_API_KEY")
+        if mistral_key:
+            try:
+                res = self._call_openai_compat("https://api.mistral.ai/v1/chat/completions", mistral_key, "mistral-small-latest", prompt)
+                return self._parse_to_result(res, "Mistral LLM")
+            except Exception as e:
+                logger.warning(f"Mistral failed: {e}")
+
+        # 2. Try Groq
+        groq_key = os.getenv("GROQ_API_KEY")
+        if groq_key:
+            try:
+                res = self._call_openai_compat("https://api.groq.com/openai/v1/chat/completions", groq_key, "llama3-8b-8192", prompt)
+                return self._parse_to_result(res, "Groq LLM")
+            except Exception as e:
+                logger.warning(f"Groq failed: {e}")
+
+        # 3. Try Gemini
+        gemini_key = os.getenv("GEMINI_API_KEY")
+        if gemini_key:
+            try:
+                res = self._call_gemini(gemini_key, prompt)
+                return self._parse_to_result(res, "Gemini LLM")
+            except Exception as e:
+                logger.warning(f"Gemini failed: {e}")
+
+        # 4. Fallback to Extractive
+        logger.info("All LLMs failed or no keys provided, falling back to extractive.")
+        return self.fallback.summarize(segments, style)
+
+    def _call_openai_compat(self, url: str, key: str, model: str, prompt: str) -> str:
+        with httpx.Client(timeout=30) as client:
+            resp = client.post(
+                url,
+                headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+                json={
+                    "model": model,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "response_format": {"type": "json_object"},
+                    "temperature": 0.2
+                }
+            )
+            resp.raise_for_status()
+            return resp.json()["choices"][0]["message"]["content"]
+
+    def _call_gemini(self, key: str, prompt: str) -> str:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={key}"
+        with httpx.Client(timeout=30) as client:
+            resp = client.post(
+                url,
+                headers={"Content-Type": "application/json"},
+                json={
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {"response_mime_type": "application/json"}
+                }
+            )
+            resp.raise_for_status()
+            return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
+
+    def _parse_to_result(self, json_str: str, source: str) -> NotesResult:
+        data = json.loads(json_str)
+        return NotesResult(
+            overview=data.get("overview", ""),
+            key_points=data.get("key_points", []),
+            keywords=data.get("keywords", [])[:8],
+            chapters=[
+                ChapterDraft(title=c.get("title",""), summary=c.get("summary",""), start_ms=c.get("start_ms",0))
+                for c in data.get("chapters", [])
+            ],
+            action_items=[
+                ActionDraft(text=a.get("text",""), assignee=a.get("assignee"), source_start_ms=a.get("source_start_ms",0))
+                for a in data.get("action_items", [])
+            ],
+            generated_by=source
+        )
+
 def get_summary_provider() -> SummaryProvider:
-    return ExtractiveSummaryProvider()
+    return MultiLLMFallbackProvider()
+
 
 
 def generate_notes(

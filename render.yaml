@@ -1,0 +1,15 @@
+# Deploys the FastAPI backend on Render. The frontend deploys on Vercel
+# with its root directory set to `frontend`.
+services:
+  - type: web
+    name: fireflies-clone-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    envVars:
+      - key: CORS_ORIGINS
+        sync: false # set to the deployed frontend URL
+      - key: SEED_ON_STARTUP
+        value: "true"
