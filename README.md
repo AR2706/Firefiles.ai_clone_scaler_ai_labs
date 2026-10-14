@@ -5,9 +5,6 @@
 
 A full-stack AI meeting note-taker application built with Next.js, FastAPI, and robust LLM orchestration. This project automatically processes meeting transcripts, generates intelligent summaries, and allows users to search, annotate, and manage their meeting history.
 
-## 🚀 Live Demo
-- **Frontend (Vercel):** *[Insert your Vercel URL here]*
-- **Backend API (Render):** *[Insert your Render URL here]/docs*
 
 ---
 
