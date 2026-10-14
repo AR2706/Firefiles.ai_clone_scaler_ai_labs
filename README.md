@@ -1,11 +1,14 @@
 ## 🚀 Live Demo
-- **Frontend (Vercel):** [Insert your Vercel URL here]
-- **Backend API (Render):** [Insert your Render URL here]/docs
+- **Frontend (Vercel):** https://firefiles-ai-clone-scaler-ai-labs.vercel.app/
+- **Backend API (Render):** https://firefiles-ai-clone-scaler-ai-labs.onrender.com/docs
 # Fireflies.ai Clone 🎙️
 
 A full-stack AI meeting note-taker application built with Next.js, FastAPI, and robust LLM orchestration. This project automatically processes meeting transcripts, generates intelligent summaries, and allows users to search, annotate, and manage their meeting history.
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> a4ed904eaf715a08af5d00e4c2fb9acdb1ffb08f
 ---
 
 ## ✨ Key Features
